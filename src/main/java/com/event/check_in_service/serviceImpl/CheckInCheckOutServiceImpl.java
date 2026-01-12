@@ -36,10 +36,17 @@ public class CheckInCheckOutServiceImpl implements CheckInCheckOutService {
         try {
 
         Optional<Attendance> lastestRecord = attendanceRepository.findFirstByEmployeeIdOrderByCreatedAtDesc(employeeId);
-        if (lastestRecord.isPresent() && isWithinTimeDuration(lastestRecord.get().getCreatedAt())) {
-            log.warn("Duplicated Tap detected for employeeId: {}", employeeId);
-            return lastestRecord.get();
-        }
+            if (lastestRecord.isPresent()) {
+                Attendance a = lastestRecord.get();
+
+                LocalDateTime lastTapTime =
+                        (a.getStatus() == Status.OPEN) ? a.getCheckInTime() : a.getCheckOutTime();
+
+                if (isWithinTimeDuration(lastTapTime)) {
+                    log.warn("Duplicated Tap detected for employeeId: {}", employeeId);
+                    return a;
+                }
+            }
 
         Optional<Attendance> getExistingRecord = attendanceRepository.findByEmployeeIdAndStatus(employeeId, Status.OPEN);
         if (getExistingRecord.isEmpty())
@@ -75,7 +82,7 @@ public class CheckInCheckOutServiceImpl implements CheckInCheckOutService {
             long totalDurationInMin = Duration.between(existingRecord.getCheckInTime(),
                     existingRecord.getCheckOutTime()).toMinutes();
 
-            existingRecord.setTotalDuration((double) (totalDurationInMin));
+            existingRecord.setTotalDuration((double) (totalDurationInMin) / 60);
             Attendance updatedRecord = attendanceRepository.save(existingRecord);
             saveEventInDb(existingRecord);
 
