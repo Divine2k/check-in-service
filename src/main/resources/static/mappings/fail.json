@@ -1,0 +1,12 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "url": "/api/v1/sync",
+    "bodyPatterns": [{ "contains": "999" }]
+  },
+  "response": {
+    "status": 500,
+    "body": "{\"error\": \"Legacy System Failure\"}"
+  }
+}

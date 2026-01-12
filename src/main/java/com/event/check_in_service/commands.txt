@@ -1,0 +1,142 @@
+
+Step A — Controller + Swagger + clear API contract (1–2 hours)
+Goal
+
+Make your API look “real system” level.
+
+Must-do
+
+POST /api/v1/checkin
+
+Request: employeeId
+
+Response includes:
+
+action: CLOCKED_IN / CLOCKED_OUT / IGNORED_DUPLICATE
+
+optionally the attendanceId and workedHours if checkout
+
+Swagger
+
+Add OpenAPI annotations
+
+Examples in Swagger
+
+Stand-out detail
+
+Add an Idempotency-Key header support (optional but easy):
+
+if same key repeats within 1 min → return same result
+This complements your 60s duplicate scan logic.
+
+Step B — Kafka Publisher (you already have scheduler) (2–4 hours)
+Goal
+
+Make outbox publishing robust + professional.
+
+What makes it stand out
+
+Publish message with headers:
+
+eventId
+
+eventType
+
+correlationId
+
+eventVersion=1
+
+On publish success:
+
+mark outbox SENT
+
+On failure:
+
+increase retry_count
+
+store last_error
+
+schedule next_retry_at
+
+This is NOT overengineering — it’s standard production hygiene.
+
+Step C — Kafka Consumers (the most important remaining “wow” part) (½–1 day)
+Split consumers by responsibility
+
+You already planned this well:
+
+Consumer A: Legacy integration
+
+Consumer B: Email
+
+Consumer A (Legacy)
+
+This one must look production-ready because requirement explicitly mentions:
+
+unpredictable latency
+
+multiple attempts required
+
+So implement:
+✅ timeout
+✅ retries
+✅ backoff
+✅ DLT after N failures
+
+Stand-out but still on-topic:
+
+legacy_processing table: store processed event IDs (idempotency)
+
+So if Kafka redelivers:
+
+you do not call legacy twice
+
+This gives you a strong interview defense:
+
+“At-least-once messaging requires idempotent consumers.”
+
+Step D — Email Service (4–6 hours)
+
+Keep it simple:
+
+consumer listens to email topic
+
+calls email provider (mock / log)
+
+But stand out with:
+
+a proper email template
+
+include:
+
+employee id
+
+check-in time
+
+check-out time
+
+total hours
+
+Also: retry email only 1–2 times max (or none) because it’s “best effort”.
+
+Step E — Use Virtual Threads (good idea, but keep it clean)
+
+Virtual threads are a good “professional touch” as long as:
+
+you don’t mix it with blocking stuff carelessly
+
+you use it for:
+
+HTTP calls to legacy system
+
+email sending
+
+Clean defense:
+
+Virtual threads allow handling many slow legacy calls without exhausting platform threads.
+
+Just ensure:
+
+RestClient/WebClient timeouts are set
+
+max concurrency limits on legacy requests are enforced (even with virtual threads)
