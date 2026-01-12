@@ -2,7 +2,7 @@
 
 ## Document Link (Q&A / Design Notes)
 Here's a link to a detailed paper that answers the design questions and explains the main decisions:
-  <a href="https://drive.google.com/file/d/1EroddadN7KbtSM3pS-fRMnIyvD9Mch18/view?usp=sharing" target="blank" rel="noopener noreferrer">
+  <a href="Answers.pdf" target="blank" rel="noopener noreferrer">
   Google Drive Document (Design Q&A)
   </a>
 ## Project Overview
