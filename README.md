@@ -2,8 +2,9 @@
 
 ## Document Link (Q&A / Design Notes)
 Here's a link to a detailed paper that answers the design questions and explains the main decisions:
-- **Google Drive Link:** <https://drive.google.com/file/d/1EroddadN7KbtSM3pS-fRMnIyvD9Mch18/view?usp=sharing>
-
+  <a href="https://drive.google.com/file/d/1EroddadN7KbtSM3pS-fRMnIyvD9Mch18/view?usp=sharing" target="_blank" rel="noopener noreferrer">
+  Google Drive Document (Design Q&A)
+  </a>
 ## Project Overview
 This project implements a **production-oriented backend service** (“Check-in Service”) for handling **worker clock-in / clock-out events** in a factory environment.  
 Card readers call a single REST endpoint with an employee ID. The service tracks working time and, on check-out, asynchronously triggers:
