@@ -2,8 +2,8 @@
 
 ## Document Link (Q&A / Design Notes)
 Here's a link to a detailed paper that answers the design questions and explains the main decisions:
-  <a href="https://drive.google.com/file/d/1EroddadN7KbtSM3pS-fRMnIyvD9Mch18/view?usp=sharing" target="_blank" rel="noopener noreferrer">
-  Google Drive Document (Design Q&A)
+  <a href="Answers.pdf" target="blank" rel="noopener noreferrer">
+  Document (Design Q&A)
   </a>
 ## Project Overview
 This project implements a **production-oriented backend service** (“Check-in Service”) for handling **worker clock-in / clock-out events** in a factory environment.  
