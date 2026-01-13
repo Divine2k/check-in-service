@@ -37,7 +37,7 @@ This project majorly focuses on **reliability**, **consistency**, and **failure 
 
 ### Retry Handling
 - Scheduler tries `4` times to publish to kafka, while each time recording the failure in the `Event` db.
-- In case of a failed legacy system api call or email notification api call, the consumer tries few times and finally dumps it in DLT topic.
+- In case of a failed legacy system api call or email notification api call, the consumer tries few times and finally dumps it in DLQ topic.
 
 ### Utility Frameworks
 - Kafka UI included for inspecting topics & message flow.
